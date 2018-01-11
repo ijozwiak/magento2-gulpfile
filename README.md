@@ -8,7 +8,7 @@ Requirements
 - gulp-cli (intalled globally) - npm install -g gulp-cli
 - Magento 2 project with LESS based theme 
 
->>> If you need SASS support I recommend the excellent [Frontools by Snowdog](https://github.com/SnowdogApps/magento2-frontools) 
+> If you need SASS support I highly recommend the excellent [Frontools by Snowdog](https://github.com/SnowdogApps/magento2-frontools) 
 
 
 Installation and setup
@@ -32,7 +32,8 @@ Installation and setup
           "name": <Theme-name>,
           "files": [
             "css/styles-m",
-            "css/styles-l"
+            "css/styles-l",
+            "css/<custom-css"
            ]
          }
         };
@@ -47,7 +48,7 @@ Installation and setup
 4. Create configuration file **dev/tools/gulp/configs/browser-sync.js** with the following contents.
 
         module.exports = {
-          proxy : "m22ce.demo"
+          proxy : "local.magento"
         }
 
 _proxy_: Local address of your site
@@ -76,7 +77,7 @@ Clean old assets and run deployments commands.
 
 **Cache clean**
         
-        gulp clean-cache --Theme-name
+        gulp clean --Theme-name
 
 Clean local cache in var/page_cache/ var/cache/ /var/di/ /var/generation/
 
