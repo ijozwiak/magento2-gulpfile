@@ -12,13 +12,12 @@ Usage
         npm install /  yarn install  
 
 
-3. Create a configuration file **dev/tools/gulp/themes.js** with the following contents.
+3. Create configuration file **dev/tools/gulp/configs/themes.js** with the following contents.
 
         module.exports = {
         <Theme>: {
           "src": [
-            "vendor/<Vendor>/<Theme-name>",
-            "vendor/<Vendor>/<Module-name>"
+            "app/design/frontend/<Vendor>/<Theme-name>"
             ],
           "dest": "pub/static/frontend/<Vendor>/<Theme-name>",
           "locale": [locale,locale],
@@ -32,10 +31,8 @@ Usage
            ]
          }
         };
-        
 
-
-src:  Array of theme and modules you want to compile in format "vendor/<Vendor>/<Module-name>"
+src:  Array of theme and modules you want to compile
 
 dest: Path in pub/static of your theme
 
@@ -46,31 +43,36 @@ name: theme name in format theme-name,
 locale: array of language to compile,
 
 files: Files to compile
+        
+4. Create configuration file **dev/tools/gulp/configs/browser-sync.js** with the following contents.
+
+        module.exports = {
+          proxy : "m22ce.demo"
+        }
+
+proxy: Local address of your site
 
 
 Commands
 --------
  
-1. **Task watch**. Watches for less changes in vendor modules/themes and compile them in pub/static..       
+1. **CSS**. Compiles less to CSS.       
+        
+        gulp css --Theme-name
+
+1. **Watch**. Watches for less changes in vendor modules/themes and compile them in pub/static.       
         
         gulp watch --Theme-name
         
-2. **Task clean**. Clean old assets and run deployments commands.    
+1. **Deploy**. Clean old assets and run deployments commands.    
         
         gulp clean --Theme-name
 
-2. **Task clean cache**. Clean cache.   
+1. **Cache clean**. Clean local cache in var/page_cache/ var/cache/ /var/di/ /var/generation/
         
         gulp clean-cache --Theme-name
 
-Licence
--------
-[OSL - Open Software Licence 3.0](http://opensource.org/licenses/osl-3.0.php)
+1. **Browsersync**. Initiate browsersync (already included in the watch task).   
+        
+        gulp browser-sync --Theme-name
 
-Changelog
---------
-
-- 3.1.0 Compile in different locales
-- 3.0.0 Added build and clean tasks
-- 2.0.0 Added sourcemaps
-- 1.0.0 First release

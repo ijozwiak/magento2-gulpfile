@@ -98,7 +98,7 @@ gulp.task('deploy', function() {
         }))
         .pipe(run(staticAssetDeploy))
         .pipe(gutil.buffer(function() {
-            gutil.log(chalk.green('Finished! now run "gulp watch --[your theme name]"'));
+            gutil.log(chalk.green('Deployment finished! Run "gulp watch --[your theme name]"'));
         }));
 
 });
