@@ -6,7 +6,7 @@ var gulp  = require('gulp'),
     run   = require('gulp-run'),
     browserSync = require('browser-sync').create(),
     sourcemap = require('gulp-sourcemaps'),
-    themesConfig = require('./dev/tools/gulp/themes'),
+    themesConfig = require('./dev/tools/gulp/configs/themes'),
     browserConfig = require('./dev/tools/gulp/configs/browser-sync');
 
 var options = ((process.argv.slice(2))[1]).substring(2);
@@ -78,7 +78,7 @@ gulp.task('deploy', function() {
 
     var theme = themesConfig[options],
         createAlias  = 'bin/magento dev:source-theme:deploy --theme ' + theme.vendor + '/'+ theme.name + ' --locale ' + theme.locale[0] + ' ' + theme.files.join(' '),
-        staticAssetDeploy = 'bin/magento setup:static-content:deploy -f --theme ' + theme.vendor + '/'+ theme.name,
+        staticAssetDeploy = 'bin/magento setup:static-content:deploy --theme ' + theme.vendor + '/'+ theme.name,
         staticFolder = 'pub/static/' + theme.area + '/' + theme.vendor + '/' + theme.name;
 
     var folderToClean = [
