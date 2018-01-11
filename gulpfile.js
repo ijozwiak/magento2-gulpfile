@@ -61,8 +61,8 @@ gulp.task('css', function() {
 gulp.task('deploy', function() {
 
     var theme = themesConfig[options],
-        createAlias  = 'bin/magento dev:source-theme:deploy --theme ' + theme.vendor + '/'+ theme.name + ' --locale ' + theme.locale[0],
-        staticAssetDeploy = 'bin/magento setup:static-content:deploy',
+        createAlias  = 'bin/magento dev:source-theme:deploy --theme ' + theme.vendor + '/'+ theme.name + ' --locale ' + theme.locale[0] + ' ' + theme.files.join(' '),
+        staticAssetDeploy = 'bin/magento setup:static-content:deploy -f --theme ' + theme.vendor + '/'+ theme.name,
         staticFolder = 'pub/static/' + theme.area + '/' + theme.vendor + '/' + theme.name;
 
     var folderToClean = [
@@ -90,7 +90,7 @@ gulp.task('deploy', function() {
 /**
  * Cache clean
  */
- 
+
 gulp.task('clean', function() {
 
     var folderToClean = [
