@@ -11,7 +11,6 @@ Usage
 
         npm install /  yarn install  
 
-
 3. Create configuration file **dev/tools/gulp/configs/themes.js** with the following contents.
 
         module.exports = {
@@ -31,18 +30,13 @@ Usage
            ]
          }
         };
-
-src:  Array of theme and modules you want to compile
-
-dest: Path in pub/static of your theme
-
-area: area, one of (frontend|adminhtml|doc),
-
-name: theme name in format theme-name,
-
-locale: array of language to compile,
-
-files: Files to compile
+  
+_src_:  Array of theme and modules you want to compile
+_dest_: Path in pub/static of your theme
+_area_: area, one of (frontend|adminhtml|doc),
+_name_: theme name in format theme-name,
+_locale_: array of language to compile,
+_files_: Files to compile
         
 4. Create configuration file **dev/tools/gulp/configs/browser-sync.js** with the following contents.
 
@@ -50,29 +44,39 @@ files: Files to compile
           proxy : "m22ce.demo"
         }
 
-proxy: Local address of your site
+_proxy_: Local address of your site
 
 
 Commands
 --------
  
-1. **CSS**. Compiles less to CSS.       
+1. **CSS**
         
         gulp css --Theme-name
 
-1. **Watch**. Watches for less changes in vendor modules/themes and compile them in pub/static.       
+  Compiles less to CSS.       
+
+1. **Watch**
         
         gulp watch --Theme-name
-        
-1. **Deploy**. Clean old assets and run deployments commands.    
-        
-        gulp clean --Theme-name
 
-1. **Cache clean**. Clean local cache in var/page_cache/ var/cache/ /var/di/ /var/generation/
+  Watches for less changes in vendor modules/themes and compile them in pub/static.
+        
+1. **Deploy**
+        
+        gulp deploy --Theme-name
+
+  Clean old assets and run deployments commands.    
+
+1. **Cache clean**
         
         gulp clean-cache --Theme-name
 
-1. **Browsersync**. Initiate browsersync (already included in the watch task).   
+  Clean local cache in var/page_cache/ var/cache/ /var/di/ /var/generation/
+
+1. **Browsersync**
         
         gulp browser-sync --Theme-name
+
+  Initiate browsersync (already included in the watch task).   
 
