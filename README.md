@@ -1,12 +1,6 @@
-# BITBULL MAGENTO2 GULPFILE #
+# MAGENTO2 GULPFILE #
 
-Simple Gulpfile for Magento2
-
-Why?
-----
-
-This project is originated from the need to make faster the frontend workflow of Magento 2.
-More info here: http://www.bitbull.it/blog/la-compilazione-del-less-in-magento2/
+Based on Bitbull's Simple Gulpfile for Magento2 (https://github.com/bitbull-team/magento2-gulpfile).
 
 Usage
 -----
@@ -80,11 +74,3 @@ Changelog
 - 3.0.0 Added build and clean tasks
 - 2.0.0 Added sourcemaps
 - 1.0.0 First release
-
-Developer
----------
-Irene Iaccio(@nuovecode) http://www.bitbull.it
-
-Copyright
----------
-(c) 2016 Bitbull Srl

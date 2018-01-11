@@ -10,7 +10,7 @@ var gulp  = require('gulp'),
 var options = ((process.argv.slice(2))[1]).substring(2);
 
 /**
- * Watch task
+ * Watch for changes
  */
 
 gulp.task('watch',
@@ -24,7 +24,7 @@ gulp.task('watch',
 
 
 /**
- * Less Compile Task.
+ * Compile less
  */
 
 gulp.task('css', function() {
@@ -55,10 +55,10 @@ gulp.task('css', function() {
 });
 
 /**
- * Clean Task.
+ * Deploy static assets
  */
 
-gulp.task('clean', function() {
+gulp.task('deploy', function() {
 
     var theme = themesConfig[options],
         createAlias  = 'bin/magento dev:source-theme:deploy --theme ' + theme.vendor + '/'+ theme.name + ' --locale ' + theme.locale[0],
@@ -87,11 +87,17 @@ gulp.task('clean', function() {
 
 });
 
-gulp.task('clean-cache', function() {
+/**
+ * Cache clean
+ */
+ 
+gulp.task('clean', function() {
 
     var folderToClean = [
         './var/page_cache/*',
-        './var/cache/*'
+        './var/cache/*',
+        './var/di/*',
+        './var/generation/*'
     ];
 
     return gulp.src(folderToClean, {read: false})
