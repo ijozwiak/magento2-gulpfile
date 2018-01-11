@@ -4,8 +4,10 @@ var gulp  = require('gulp'),
     chalk = require('chalk'),
     clean = require('gulp-clean'),
     run   = require('gulp-run'),
+    browserSync = require('browser-sync').create(),
     sourcemap = require('gulp-sourcemaps'),
-    themesConfig = require('./dev/tools/gulp/themes');
+    themesConfig = require('./dev/tools/gulp/themes'),
+    browserConfig = require('./dev/tools/gulp/configs/browser-sync');
 
 var options = ((process.argv.slice(2))[1]).substring(2);
 
@@ -16,10 +18,14 @@ var options = ((process.argv.slice(2))[1]).substring(2);
 gulp.task('watch',
     function() {
         var theme = themesConfig[options];
+
+        browserSync.init({
+            proxy: browserConfig.proxy
+        });
+
         theme.src.forEach(function(module) {
             gulp.watch([ module + '/**/*.less'], ['css']);
         });
-
     });
 
 
@@ -47,11 +53,21 @@ gulp.task('css', function() {
             }))
             .pipe(sourcemap.write())
             .pipe(gulp.dest(theme.dest + '/' + locale + '/css'))
+            .pipe(browserSync.stream())
             .pipe(gutil.buffer(function() {
                 gutil.log(chalk.green('Successfully compiled ' + locale ));
             }));
     });
+});
 
+/**
+ * Browser Sync
+ */
+
+gulp.task('browser-sync', function() {
+    browserSync.init({
+        proxy: browserConfig.proxy
+    });
 });
 
 /**

@@ -6,6 +6,7 @@
     "gulp-less": "^3.3.2",
     "gulp-run": "^1.7.1",
     "gulp-sourcemaps": "^2.6.0",
-    "gulp-util": "^3.0.8"
+    "gulp-util": "^3.0.8",
+    "browser-sync": "^2.23.5"
   }
 }
