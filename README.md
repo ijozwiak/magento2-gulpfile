@@ -31,12 +31,12 @@ Usage
          }
         };
   
-_src_:  Array of theme and modules you want to compile
-_dest_: Path in pub/static of your theme
-_area_: area, one of (frontend|adminhtml|doc),
-_name_: theme name in format theme-name,
-_locale_: array of language to compile,
-_files_: Files to compile
+- _src_:  Array of theme and modules you want to compile
+- _dest_: Path in pub/static of your theme
+- _area_: area, one of (frontend|adminhtml|doc),
+- _name_: theme name in format theme-name,
+- _locale_: array of language to compile,
+- _files_: Files to compile
         
 4. Create configuration file **dev/tools/gulp/configs/browser-sync.js** with the following contents.
 
@@ -50,33 +50,33 @@ _proxy_: Local address of your site
 Commands
 --------
  
-1. **CSS**
-        
+**CSS**
+
         gulp css --Theme-name
 
-  Compiles less to CSS.       
+Compiles less to CSS.       
 
-1. **Watch**
+**Watch**
         
         gulp watch --Theme-name
 
-  Watches for less changes in vendor modules/themes and compile them in pub/static.
+Watches for less changes in vendor modules/themes and compile them in pub/static.
         
-1. **Deploy**
+**Deploy**
         
         gulp deploy --Theme-name
 
-  Clean old assets and run deployments commands.    
+Clean old assets and run deployments commands.    
 
-1. **Cache clean**
+**Cache clean**
         
         gulp clean-cache --Theme-name
 
-  Clean local cache in var/page_cache/ var/cache/ /var/di/ /var/generation/
+Clean local cache in var/page_cache/ var/cache/ /var/di/ /var/generation/
 
-1. **Browsersync**
+**Browsersync**
         
         gulp browser-sync --Theme-name
 
-  Initiate browsersync (already included in the watch task).   
+Initiate browsersync (already included in the watch task).   
 
