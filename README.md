@@ -1,15 +1,21 @@
-# MAGENTO2 GULPFILE #
+# Magento 2 gulp + browser-sync
 
-Based on Bitbull's Simple Gulpfile for Magento2 (https://github.com/bitbull-team/magento2-gulpfile).
+Sample files required to setup gulp-based FED task automation including browser-sync. Based on Bitbull's Simple Gulpfile for Magento2 (https://github.com/bitbull-team/magento2-gulpfile).
 
-Usage
+Requirements
 -----
+- Node.js
+- gulp-cli (intalled globally) - npm install -g gulp-cli
+- Magento 2 project with LESS based theme 
 
-1. Place the gulpfile.js and the package.json in the root of your project.
+>>> If you need SASS support I recommend the excellent [Frontools by Snowdog](https://github.com/SnowdogApps/magento2-frontools) 
 
-2. Install the required modules:
 
-        npm install /  yarn install  
+Installation and setup
+----
+1. Download gulpfile.js and package.json and put them into the root folder of your project
+2. Run 
+        npm install
 
 3. Create configuration file **dev/tools/gulp/configs/themes.js** with the following contents.
 
@@ -47,7 +53,7 @@ Usage
 _proxy_: Local address of your site
 
 
-Commands
+Usage
 --------
  
 **CSS**
