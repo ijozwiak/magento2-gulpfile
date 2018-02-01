@@ -60,31 +60,37 @@ Usage
  
 **CSS**
 
-        gulp css --Theme-name
+        gulp css [--theme-name]
 
 Compiles less to CSS.       
 
 **Watch**
         
-        gulp watch --Theme-name
+        gulp watch [--theme-name]
 
 Watches for less changes in vendor modules/themes and compile them in pub/static.
+
+**Clean static files**
         
+        gulp clean-static [--theme-name]
+        
+Clean old static assets
+
 **Deploy**
         
-        gulp deploy --Theme-name
+        gulp deploy [--theme-name]
 
-Clean old assets and run deployments commands.    
+Clean old assets and run deployment commands.    
 
 **Cache clean**
         
-        gulp clean --Theme-name
+        gulp clean-cache [--theme-name]
 
 Clean local cache in var/page_cache/ var/cache/ /var/di/ /var/generation/
 
 **Browsersync**
         
-        gulp browser-sync --Theme-name
+        gulp browser-sync [--theme-name]
 
 Initiate browsersync (already included in the watch task).   
 
