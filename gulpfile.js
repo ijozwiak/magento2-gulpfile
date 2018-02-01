@@ -1,3 +1,8 @@
+/**
+ * Copyright © 2018 Rocket Web
+ * See LICENSE.MD for license details.
+ */
+
 var gulp  = require('gulp'),
     less  = require('gulp-less'),
     gutil = require('gulp-util'),
@@ -9,24 +14,23 @@ var gulp  = require('gulp'),
     themesConfig = require('./dev/tools/gulp/configs/themes'),
     browserConfig = require('./dev/tools/gulp/configs/browser-sync');
 
-var options = ((process.argv.slice(2))[1]).substring(2);
+var options = (process.argv.slice(2))[1] ? ((process.argv.slice(2))[1]).substring(2) : Object.keys(themesConfig)[0];
 
 /**
  * Watch for changes
  */
 
-gulp.task('watch',
-    function() {
-        var theme = themesConfig[options];
+gulp.task('watch', function() {
+    var theme = themesConfig[options];
 
-        browserSync.init({
-            proxy: browserConfig.proxy
-        });
-
-        theme.src.forEach(function(module) {
-            gulp.watch([ module + '/**/*.less'], ['css']);
-        });
+    browserSync.init({
+        proxy: browserConfig.proxy
     });
+
+    theme.src.forEach(function(module) {
+        gulp.watch([ module + '/**/*.less'], ['css']);
+    });
+});
 
 
 /**
@@ -71,14 +75,39 @@ gulp.task('browser-sync', function() {
 });
 
 /**
+ * Clean static files
+ */
+
+gulp.task('clean-static', function () {
+
+    var theme = themesConfig[options],
+        staticFolder = 'pub/static/' + theme.area + '/' + theme.vendor + '/' + theme.name;
+
+    var folderToClean = [
+        './' + staticFolder + '/*',
+        './var/view_preprocessed/*'
+    ];
+
+    return gulp.src(folderToClean, { read: false })
+        .pipe(clean())
+        .pipe(gutil.buffer(function () {
+            gutil.log(chalk.blue('Clean ' + staticFolder));
+            gutil.log(chalk.blue('Clean preprocessed files'));
+        }))
+        .pipe(gutil.buffer(function () {
+            gutil.log(chalk.green('Static files have been cleaned.'));
+        }));
+});
+
+/**
  * Deploy static assets
  */
 
 gulp.task('deploy', function() {
 
     var theme = themesConfig[options],
-        createAlias  = 'bin/magento dev:source-theme:deploy --theme ' + theme.vendor + '/'+ theme.name + ' --locale ' + theme.locale[0] + ' ' + theme.files.join(' '),
-        staticAssetDeploy = 'bin/magento setup:static-content:deploy --theme ' + theme.vendor + '/'+ theme.name,
+        createAlias  = 'bin/magento dev:source-theme:deploy --theme ' + theme.vendor + '/' + theme.name + ' --locale ' + theme.locale[0] + ' ' + theme.files.join(' '),
+        staticAssetDeploy = 'bin/magento setup:static-content:deploy --theme ' + theme.vendor + '/' + theme.name + ' -v',
         staticFolder = 'pub/static/' + theme.area + '/' + theme.vendor + '/' + theme.name;
 
     var folderToClean = [
@@ -89,25 +118,26 @@ gulp.task('deploy', function() {
     return gulp.src(folderToClean, {read: false})
         .pipe(clean())
         .pipe(gutil.buffer(function() {
-            gutil.log(chalk.green('Clean ' + staticFolder));
-            gutil.log(chalk.green('Clean preprocessed files'));
+            gutil.log(chalk.blue('Clean ' + staticFolder));
+            gutil.log(chalk.blue('Clean preprocessed files'));
         }))
         .pipe(run(createAlias))
         .pipe(gutil.buffer(function() {
-            gutil.log(chalk.green('Asset static deployment is starting. Wait...'));
+            gutil.log(chalk.blue('Asset static deployment is starting. Wait...'));
         }))
-        .pipe(run(staticAssetDeploy))
+        .pipe(run(staticAssetDeploy).on('error', function (error) {
+            gutil.log(chalk.red('Error: ' + error.message));
+        }))
         .pipe(gutil.buffer(function() {
-            gutil.log(chalk.green('Deployment finished! Run "gulp watch --[your theme name]"'));
+            gutil.log(chalk.green('Deployment finished! Run `gulp watch --[your theme name]`'));
         }));
-
 });
 
 /**
  * Cache clean
  */
 
-gulp.task('clean', function() {
+gulp.task('clean-cache', function() {
 
     var folderToClean = [
         './var/page_cache/*',
@@ -119,9 +149,9 @@ gulp.task('clean', function() {
     return gulp.src(folderToClean, {read: false})
         .pipe(clean())
         .pipe(gutil.buffer(function() {
-            gutil.log(chalk.green('Cache cleaned'));
+            gutil.log(chalk.green('Cache cleaned: var/page_cache/ var/cache/ /var/di/ /var/generation/'));
         }))
 });
 
 
-gulp.task('default', ['watch']);
+gulp.task('default', ['css']);
