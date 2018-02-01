@@ -53,6 +53,7 @@ Installation and setup
 
 _proxy_: Local address of your site
 
+>>> If you're getting error message about outdated less module run `npm install --save less`
 
 Usage
 --------
