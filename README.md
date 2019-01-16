@@ -60,13 +60,21 @@ Usage
  
 **CSS**
 
+<<<<<<< HEAD
         gulp css [--theme-name]
+=======
+        gulp css [--Theme-name]
+>>>>>>> Update gulpfile for better compatibility with M2.2
 
 Compiles less to CSS.       
 
 **Watch**
         
+<<<<<<< HEAD
         gulp watch [--theme-name]
+=======
+        gulp watch [--Theme-name]
+>>>>>>> Update gulpfile for better compatibility with M2.2
 
 Watches for less changes in vendor modules/themes and compile them in pub/static.
 
@@ -78,13 +86,39 @@ Clean old static assets
 
 **Deploy**
         
+<<<<<<< HEAD
         gulp deploy [--theme-name]
+=======
+        gulp deploy [--Theme-name]
+>>>>>>> Update gulpfile for better compatibility with M2.2
 
 Clean old assets and run deployment commands.    
 
+**Deploy static assets (frontend)**
+        
+        gulp deploy-static [--Theme-name]
+
+Manually trigger static asset deployment for frontend.
+
+**Deploy static assets (admin)**
+        
+        gulp deploy-admin [--Theme-name]
+
+Manually trigger static asset deployment for admin.
+
+**Static assets clean**
+        
+        gulp clean-static [--Theme-name]
+
+Clean static assets in pub/static and var/view_preprocessed folders.
+
 **Cache clean**
         
+<<<<<<< HEAD
         gulp clean-cache [--theme-name]
+=======
+        gulp clean-cache [--Theme-name]
+>>>>>>> Update gulpfile for better compatibility with M2.2
 
 Clean local cache in var/page_cache/ var/cache/ /var/di/ /var/generation/
 
