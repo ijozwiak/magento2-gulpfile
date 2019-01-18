@@ -19,96 +19,80 @@ Installation and setup
 
 3. Create configuration file **dev/tools/gulp/configs/themes.js** with the following contents.
 
-        module.exports = {
-        <Theme>: {
-          "src": [
-            "app/design/frontend/<Vendor>/<Theme-name>"
-            ],
-          "dest": "pub/static/frontend/<Vendor>/<Theme-name>",
-          "locale": [locale,locale],
-          "lang": "less",
-          "area": "frontend",
-          "vendor": <Vendor>,
-          "name": <Theme-name>,
-          "files": [
-            "css/styles-m",
-            "css/styles-l",
-            "css/<custom-css"
-           ]
-         }
-        };
+		module.exports = {
+			<"theme-alias">: {
+				"locale": locale,
+				"lang": "less",
+				"area": "frontend",
+				"vendor": <"Vendor">,
+				"name": <"Theme-name">,
+				"files": [
+					"css/styles-m",
+					"css/styles-l",
+					"css/<custom-css>"
+				]
+			}
+		};
   
-- _src_:  Array of theme and modules you want to compile
-- _dest_: Path in pub/static of your theme
-- _area_: area, one of (frontend|adminhtml|doc),
-- _name_: theme name in format theme-name,
-- _locale_: array of language to compile,
+- _locale_: local language,
+- _lang_: css preprocessor (currently only less is supported)
+- _area_: area, one of (frontend|adminhtml|base),
+- _vendor_: developing company,
+- _name_: theme name,
 - _files_: Files to compile
         
 4. Create configuration file **dev/tools/gulp/configs/browser-sync.js** with the following contents.
 
         module.exports = {
-          proxy : "local.magento"
+          	proxy : "local.magento"
         }
 
 _proxy_: Local address of your site
 
->>> If you're getting error message about outdated less module run `npm install --save less`
-
 Usage
 --------
- 
-**CSS**
+**Default usage**
 
-        gulp css [--Theme-name]
+Refresh static assets, compile and watch less files for changes
 
-Compiles less to CSS.       
+        gulp [--Theme-name]
 
-**Watch**
-        
-        gulp watch [--Theme-name]
+> Note: Theme name is optional, the first available theme in themes.js is used by default
+---
+**Additional commands**
 
-Watches for less changes in vendor modules/themes and compile them in pub/static.
+Compile less to CSS
 
-**Clean static files**
+        gulp less [--Theme-name]
+
+
+Clean static assets in pu/static and var/view_preprocessed folders
         
         gulp clean-static [--theme-name]
         
-Clean old static assets
 
-**Deploy**
+Create aliases in pub/static folder
         
-        gulp deploy [--Theme-name]
+        gulp source [--Theme-name]
 
-Clean old assets and run deployment commands.    
 
-**Deploy static assets (frontend)**
+Manually trigger static asset deployment for frontend
         
         gulp deploy-static [--Theme-name]
 
-Manually trigger static asset deployment for frontend.
 
-**Deploy static assets (admin)**
+Manually trigger static asset deployment for admin
         
         gulp deploy-admin [--Theme-name]
 
-Manually trigger static asset deployment for admin.
 
-**Static assets clean**
+Clean local cache in var/page_cache/ var/cache/ /var/di/ /var/generation/ 
         
-        gulp clean-static [--Theme-name]
+        gulp cache [--Theme-name]
 
-Clean static assets in pub/static and var/view_preprocessed folders.
 
-**Cache clean**
+Serves static assets and watches for less file changes in vendor modules/themes.
         
-        gulp clean-cache [--Theme-name]
+        gulp serve [--Theme-name]
 
-Clean local cache in var/page_cache/ var/cache/ /var/di/ /var/generation/
-
-**Browsersync**
-        
-        gulp browser-sync [--theme-name]
-
-Initiate browsersync (already included in the watch task).   
 
