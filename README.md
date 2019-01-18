@@ -13,12 +13,22 @@ Requirements
 
 Installation and setup
 ----
-1. Download gulpfile.js and package.json and put them into the root folder of your project
-2. Run 
+1. Download gulpfile.js into the root folder of your project
+2. Add the following dependancies to your local package.json file (into devDependancies):
+		
+		"chalk": "^2.1.0",
+    	"gulp": "^4.0.0",
+    	"gulp-clean": "^0.3.2",
+    	"gulp-less": "^4.0.1",
+    	"gulp-run": "^1.7.1",
+    	"gulp-sourcemaps": "^2.6.0",
+    	"gulp-util": "^3.0.8",
+    	"browser-sync": "^2.26.3"
+3. Run 
 	
 		npm install
 
-3. Create configuration file **dev/tools/gulp/configs/themes.js** with the following contents.
+4. Create configuration file **dev/tools/gulp/configs/themes.js** with the following contents.
 
 		module.exports = {
 			<"theme-alias">: {
@@ -42,7 +52,7 @@ Installation and setup
 - _name_: theme name,
 - _files_: Files to compile
         
-4. Create configuration file **dev/tools/gulp/configs/browser-sync.js** with the following contents.
+5. Create configuration file **dev/tools/gulp/configs/browser-sync.js** with the following contents.
 
         module.exports = {
           	proxy : "local.magento"
