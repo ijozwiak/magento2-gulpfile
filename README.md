@@ -15,7 +15,8 @@ Installation and setup
 ----
 1. Download gulpfile.js and package.json and put them into the root folder of your project
 2. Run 
-        npm install
+	
+		npm install
 
 3. Create configuration file **dev/tools/gulp/configs/themes.js** with the following contents.
 
@@ -55,44 +56,44 @@ Usage
 
 Refresh static assets, compile and watch less files for changes
 
-        gulp [--Theme-name]
+        gulp [--theme-alias]
 
-> Note: Theme name is optional, the first available theme in themes.js is used by default
+> Note: [--theme-alias] is optional, the first available theme in themes.js is used by default
 ---
 **Additional commands**
 
 Compile less to CSS
 
-        gulp less [--Theme-name]
+        gulp less [--theme-alias]
 
 
 Clean static assets in pu/static and var/view_preprocessed folders
         
-        gulp clean-static [--theme-name]
+        gulp clean-static [--theme-alias]
         
 
 Create aliases in pub/static folder
         
-        gulp source [--Theme-name]
+        gulp source [--theme-alias]
 
 
 Manually trigger static asset deployment for frontend
         
-        gulp deploy-static [--Theme-name]
+        gulp deploy-static [--theme-alias]
 
 
 Manually trigger static asset deployment for admin
         
-        gulp deploy-admin [--Theme-name]
+        gulp deploy-admin [--theme-alias]
 
 
 Clean local cache in var/page_cache/ var/cache/ /var/di/ /var/generation/ 
         
-        gulp cache [--Theme-name]
+        gulp cache [--theme-alias]
 
 
 Serves static assets and watches for less file changes in vendor modules/themes.
         
-        gulp serve [--Theme-name]
+        gulp serve [--theme-alias]
 
 
