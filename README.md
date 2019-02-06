@@ -101,12 +101,16 @@ Create aliases in pub/static folder:
 
 Manually trigger static asset deployment for frontend:
         
-	gulp deploy-static [--theme-alias]
+	gulp deploy:static [--theme-alias]
 
 Manually trigger static asset deployment for admin:
         
-	gulp deploy-admin [--theme-alias]
+	gulp deploy:admin [--theme-alias]
 
 Serves static assets and watches for less file changes in vendor modules/themes:
         
 	gulp serve [--theme-alias]
+
+License
+-----
+This project is licensed under **GNU General Public License v3.0**
