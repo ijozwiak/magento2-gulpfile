@@ -5,7 +5,7 @@ Sample files required to setup gulp-based FED task automation including browser-
 Requirements
 -----
 - Node.js
-- gulp-cli (intalled globally) - npm install -g gulp-cli
+- gulp-cli (intalled globally) - `npm install -g gulp-cli`
 - Magento 2 project with LESS based theme 
 
 > If you need SASS support I highly recommend the excellent [Frontools by Snowdog](https://github.com/SnowdogApps/magento2-frontools) 
@@ -62,6 +62,26 @@ Installation and setup
         }
 
 _proxy_: Local address of your site
+
+6. Create configuration file **dev/tools/gulp/configs/stylelint.js** with the following contents.
+
+    	module.exports = {
+			"extends": "stylelint-config-standard",
+			"ignoreFiles": ["/**/_module.less", "/**/_widgets.less"],
+			"rules": {
+				"at-rule-empty-line-before": null,
+				"no-descending-specificity": true,
+				"indentation": 4,
+				"string-quotes": "single",
+				"selector-max-id": 0,
+				"selector-class-pattern": "^_?[a-z0-9]+(-[a-z0-9]+)*$",
+				"max-nesting-depth": 4,
+				"number-leading-zero": "never",
+				"max-empty-lines": 2
+			}
+		}
+
+Update _rules_ with your custom ones adding to or overriding the existing [standard rules](https://github.com/stylelint/stylelint-config-standard/blob/master/index.js).
 
 Usage
 --------
