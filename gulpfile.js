@@ -1,5 +1,5 @@
 /**
- * Copyright © 2018 Rocket Web
+ * Copyright © 2019 Rocket Web
  * See LICENSE.MD for license details.
  */
 
@@ -11,8 +11,10 @@ const gulp = require('gulp'),
     run = require('gulp-run'),
     browserSync = require('browser-sync').create(),
     sourcemap = require('gulp-sourcemaps'),
+    stylelint = require('gulp-stylelint'),
     themesConfig = require('./dev/tools/gulp/configs/themes'),
-    browserConfig = require('./dev/tools/gulp/configs/browser-sync');
+    browserConfig = require('./dev/tools/gulp/configs/browser-sync'),
+    stylelintConfig = require('./dev/tools/gulp/configs/stylelint');
 
 const options = (process.argv.slice(2))[1] ? ((process.argv.slice(2))[1]).substring(2) : Object.keys(themesConfig)[0];
 const theme = themesConfig[options];
@@ -23,10 +25,26 @@ const folderToClean = [
 ];
 
 /**
+ * Lint less files (excludes _module.less - see config/stylelint.js)
+ */
+gulp.task('less:lint', function lintCssTask() {
+    const filesToLint = theme.files.map((file) => {
+        return 'app/design/frontend/' + theme.vendor + '/' + theme.name + '/**/*.' + theme.lang
+    });
+
+    return gulp.src(filesToLint)
+        .pipe(stylelint({
+            config: stylelintConfig,
+            reporters: [
+                { formatter: 'string', console: true }
+            ]
+        }));
+});
+
+/**
  * Compile less
  */
-
-gulp.task('less', () => {
+gulp.task('less:compile', () => {
     const filesToCompile = theme.files.map((file) => {
         return 'pub/static/frontend/' + theme.vendor + '/' + theme.name + '/' + theme.locale + '/' + file + '.' + theme.lang
     });
@@ -45,84 +63,14 @@ gulp.task('less', () => {
 });
 
 /**
- * Clean static files
+ * Less processing 
  */
-
-gulp.task('clean-static', () => {
-    return gulp.src(folderToClean, { read: false })
-        .pipe(clean())
-        .pipe(gutil.buffer(() => {
-            gutil.log(chalk.blue('Clean ' + staticFolder));
-            gutil.log(chalk.blue('Clean preprocessed files'));
-        }))
-        .pipe(gutil.buffer(() => {
-            gutil.log(chalk.green('Static files have been cleaned.'));
-        }));
-});
-
-/**
- * Create aliases in pub/static folder
- */
-
-gulp.task('source', () => {
-
-    const createAlias = 'bin/magento dev:source-theme:deploy --theme ' + theme.vendor + '/' + theme.name + ' --locale ' + theme.locale + ' ' + theme.files.join(' ');
-
-    return gulp.src(staticFolder)
-        .pipe(gutil.buffer(() => {
-            gutil.log(chalk.blue('Source theme deploy started...'));
-        }))
-        .pipe(run(createAlias))
-        .pipe(gutil.buffer(() => {
-            gutil.log(chalk.green('Aliases created!'));
-        }));
-});
-
-/**
- * Deploy static assets
- */
-
-gulp.task('deploy-static', () => {
-
-    const staticDeploy = 'bin/magento setup:static-content:deploy --theme ' + theme.vendor + '/' + theme.name + ' -v -f';
-
-    return gulp.src(staticFolder)
-        .pipe(gutil.buffer(() => {
-            gutil.log(chalk.blue('Asset static deployment is starting. Wait...'));
-        }))
-        .pipe(run(staticDeploy).on('error', (error) => {
-            gutil.log(chalk.red('Error: ' + error.message));
-        }))
-        .pipe(gutil.buffer(() => {
-            gutil.log(chalk.green('Static deployment finished! Run `gulp watch --[your theme name]`'));
-        }));
-});
-
-/**
- * Deploy admin assets
- */
-
-gulp.task('deploy-admin', () => {
-
-    const adminDeploy = 'bin/magento setup:static-content:deploy --theme Magento/backend -v -f';
-
-    return gulp.src(staticFolder)
-        .pipe(gutil.buffer(() => {
-            gutil.log(chalk.blue('Asset static deployment of admin is starting. Wait...'));
-        }))
-        .pipe(run(adminDeploy).on('error', (error) => {
-            gutil.log(chalk.red('Error: ' + error.message));
-        }))
-        .pipe(gutil.buffer(() => {
-            gutil.log(chalk.green('Admin deployment finished!'));
-        }));
-});
+gulp.task('less', gulp.series('less:lint', 'less:compile'));
 
 /**
  * Cache clean
  */
-
-gulp.task('cache', function () {
+gulp.task('clean:cache', function () {
 
     const cacheFoldersToClean = [
         './var/page_cache/*',
@@ -139,16 +87,87 @@ gulp.task('cache', function () {
 });
 
 /**
+ * Clean static files
+ */
+gulp.task('clean:static', () => {
+    return gulp.src(folderToClean, { read: false })
+        .pipe(clean())
+        .pipe(gutil.buffer(() => {
+            gutil.log(chalk.blue('Clean ' + staticFolder));
+            gutil.log(chalk.blue('Clean preprocessed files'));
+        }))
+        .pipe(gutil.buffer(() => {
+            gutil.log(chalk.green('Static files have been cleaned'));
+        }));
+});
+
+/**
+ * Create aliases in pub/static folder
+ */
+gulp.task('source', () => {
+
+    const createAlias = 'bin/magento dev:source-theme:deploy --theme ' + theme.vendor + '/' + theme.name + ' --locale ' + theme.locale + ' ' + theme.files.join(' ');
+
+    return gulp.src(staticFolder)
+        .pipe(gutil.buffer(() => {
+            gutil.log(chalk.blue('Source theme deploy started...'));
+        }))
+        .pipe(run(createAlias))
+        .pipe(gutil.buffer(() => {
+            gutil.log(chalk.green('Aliases created'));
+        }));
+});
+
+/**
+ * Deploy static assets
+ */
+gulp.task('deploy:static', () => {
+
+    const staticDeploy = 'bin/magento setup:static-content:deploy --theme ' + theme.vendor + '/' + theme.name + ' -v -f';
+
+    return gulp.src(staticFolder)
+        .pipe(gutil.buffer(() => {
+            gutil.log(chalk.blue('Asset static deployment is starting. Wait...'));
+        }))
+        .pipe(run(staticDeploy).on('error', (error) => {
+            gutil.log(chalk.red('Error: ' + error.message));
+        }))
+        .pipe(gutil.buffer(() => {
+            gutil.log(chalk.green('Static deployment finished. Run `gulp watch --[your theme name]`'));
+        }));
+});
+
+/**
+ * Deploy admin assets
+ */
+gulp.task('deploy:admin', () => {
+
+    const adminDeploy = 'bin/magento setup:static-content:deploy --theme Magento/backend -v -f';
+
+    return gulp.src(staticFolder)
+        .pipe(gutil.buffer(() => {
+            gutil.log(chalk.blue('Asset static deployment of admin is starting. Wait...'));
+        }))
+        .pipe(run(adminDeploy).on('error', (error) => {
+            gutil.log(chalk.red('Error: ' + error.message));
+        }))
+        .pipe(gutil.buffer(() => {
+            gutil.log(chalk.green('Admin deployment finished'));
+        }));
+});
+
+/**
  * Watch for changes
  */
-
-gulp.task('serve', gulp.series('less', () => {
+gulp.task('serve', () => {
     browserSync.init({
         proxy: browserConfig.proxy
     });
 
     gulp.watch(['pub/static/frontend/' + theme.vendor + '/' + theme.name + '/**/*.less'], gulp.series('less'));
-}));
+});
 
-
-gulp.task('default', gulp.series('cache', 'clean-static', 'source', 'less', 'serve'));
+/**
+ * Default task
+ */
+gulp.task('default', gulp.series('clean:cache', 'clean:static', 'source', 'less', 'serve'));

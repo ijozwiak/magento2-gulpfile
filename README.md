@@ -64,7 +64,7 @@ Usage
 --------
 **Default usage**
 
-Refresh static assets, compile and watch less files for changes
+Refresh static assets, lint, compile and watch less files for changes:
 
         gulp [--theme-alias]
 
@@ -72,38 +72,41 @@ Refresh static assets, compile and watch less files for changes
 ---
 **Additional commands**
 
-Compile less to CSS
+Lint less files: 
 
-        gulp less [--theme-alias]
+	gulp less:lint [--theme-alias]
 
+> Note: _module.less and _widget.less are excluded from linting 
 
-Clean static assets in pu/static and var/view_preprocessed folders
+Compile less to CSS:
+
+	gulp less:compile [--theme-alias]
+
+Alias for less:lint and less:compile sequence:
+
+	gulp less [--theme-alias]
+
+Clean local cache in var/page_cache/ var/cache/ /var/di/ /var/generation/: 
         
-        gulp clean-static [--theme-alias]
+	gulp clean:cache [--theme-alias]
+
+Clean static assets in pub/static and var/view_preprocessed folders:
         
-
-Create aliases in pub/static folder
+	gulp clean:static [--theme-alias]
         
-        gulp source [--theme-alias]
-
-
-Manually trigger static asset deployment for frontend
+Create aliases in pub/static folder:
         
-        gulp deploy-static [--theme-alias]
+	gulp source [--theme-alias]
 
 
-Manually trigger static asset deployment for admin
+Manually trigger static asset deployment for frontend:
         
-        gulp deploy-admin [--theme-alias]
+	gulp deploy-static [--theme-alias]
 
-
-Clean local cache in var/page_cache/ var/cache/ /var/di/ /var/generation/ 
+Manually trigger static asset deployment for admin:
         
-        gulp cache [--theme-alias]
+	gulp deploy-admin [--theme-alias]
 
-
-Serves static assets and watches for less file changes in vendor modules/themes.
+Serves static assets and watches for less file changes in vendor modules/themes:
         
-        gulp serve [--theme-alias]
-
-
+	gulp serve [--theme-alias]
