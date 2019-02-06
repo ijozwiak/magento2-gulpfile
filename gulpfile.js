@@ -170,4 +170,4 @@ gulp.task('serve', () => {
 /**
  * Default task
  */
-gulp.task('default', gulp.series('clean:cache', 'clean:static', 'source', 'less', 'serve'));
+gulp.task('theme', gulp.series('clean:cache', 'clean:static', 'source', 'less', 'serve'));

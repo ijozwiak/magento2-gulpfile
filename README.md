@@ -67,9 +67,9 @@ Usage
 --------
 **Default usage**
 
-Refresh static assets, lint, compile and watch less files for changes:
+Refresh static assets, lint, compile and watch less files for changes (run `gulp --tasks` for more details):
 
-        gulp [--theme-alias]
+        gulp theme [--theme-alias]
 
 > Note: [--theme-alias] is optional, the first available theme in themes.js is used by default
 ---
@@ -100,7 +100,6 @@ Clean static assets in pub/static and var/view_preprocessed folders:
 Create aliases in pub/static folder:
         
 	gulp source [--theme-alias]
-
 
 Manually trigger static asset deployment for frontend:
         
