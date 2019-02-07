@@ -1,6 +1,6 @@
-# Magento 2 gulp + browser-sync
+# Magento 2 gulpfile 
 
-Sample files required to setup gulp-based FED task automation including browser-sync. Based on Bitbull's Simple Gulpfile for Magento2 (https://github.com/bitbull-team/magento2-gulpfile).
+Gulp tasks and configuration necessary to setup gulp-based front-end workflow for deploying and watching theme customizations.
 
 Requirements
 -----
