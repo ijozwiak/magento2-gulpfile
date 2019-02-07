@@ -12,9 +12,11 @@ const gulp = require('gulp'),
     browserSync = require('browser-sync').create(),
     sourcemap = require('gulp-sourcemaps'),
     stylelint = require('gulp-stylelint'),
+    eslint = require('gulp-eslint'),
     themesConfig = require('./dev/tools/gulp/configs/themes'),
     browserConfig = require('./dev/tools/gulp/configs/browser-sync'),
-    stylelintConfig = require('./dev/tools/gulp/configs/stylelint');
+    stylelintConfig = require('./dev/tools/gulp/configs/stylelint')
+    eslintConfig = require('./dev/tools/gulp/configs/eslint');
 
 const options = (process.argv.slice(2))[1] ? ((process.argv.slice(2))[1]).substring(2) : Object.keys(themesConfig)[0];
 const theme = themesConfig[options];
@@ -28,9 +30,7 @@ const folderToClean = [
  * Lint less files (excludes _module.less - see config/stylelint.js)
  */
 gulp.task('less:lint', function lintCssTask() {
-    const filesToLint = theme.files.map((file) => {
-        return 'app/design/frontend/' + theme.vendor + '/' + theme.name + '/**/*.' + theme.lang
-    });
+    const filesToLint = ['app/design/frontend/' + theme.vendor + '/' + theme.name + '/**/*.' + theme.lang];
 
     return gulp.src(filesToLint)
         .pipe(stylelint({
@@ -38,6 +38,9 @@ gulp.task('less:lint', function lintCssTask() {
             reporters: [
                 { formatter: 'string', console: true }
             ]
+        }))
+        .pipe(gutil.buffer(() => {
+            gutil.log(chalk.green('Less files checked'));
         }));
 });
 
@@ -68,10 +71,29 @@ gulp.task('less:compile', () => {
 gulp.task('less', gulp.series('less:lint', 'less:compile'));
 
 /**
+ * Lint all JS files in theme folder
+ */
+gulp.task('js:lint', () => {
+    const filesToLint = ['app/design/frontend/' + theme.vendor + '/' + theme.name + '/**/*.js'];
+
+    return gulp.src(filesToLint)
+        .pipe(eslint(eslintConfig))
+        .pipe(eslint.format())
+        .pipe(eslint.failAfterError())
+        .pipe(gutil.buffer(() => {
+            gutil.log(chalk.green('JS files checked'));
+        }));
+});
+
+/**
+ * JS processing 
+ */
+gulp.task('js', gulp.series('js:lint'));
+
+/**
  * Cache clean
  */
 gulp.task('clean:cache', function () {
-
     const cacheFoldersToClean = [
         './var/page_cache/*',
         './var/cache/*',
@@ -105,7 +127,6 @@ gulp.task('clean:static', () => {
  * Create aliases in pub/static folder
  */
 gulp.task('source', () => {
-
     const createAlias = 'bin/magento dev:source-theme:deploy --theme ' + theme.vendor + '/' + theme.name + ' --locale ' + theme.locale + ' ' + theme.files.join(' ');
 
     return gulp.src(staticFolder)
@@ -122,7 +143,6 @@ gulp.task('source', () => {
  * Deploy static assets
  */
 gulp.task('deploy:static', () => {
-
     const staticDeploy = 'bin/magento setup:static-content:deploy --theme ' + theme.vendor + '/' + theme.name + ' -v -f';
 
     return gulp.src(staticFolder)
@@ -141,7 +161,6 @@ gulp.task('deploy:static', () => {
  * Deploy admin assets
  */
 gulp.task('deploy:admin', () => {
-
     const adminDeploy = 'bin/magento setup:static-content:deploy --theme Magento/backend -v -f';
 
     return gulp.src(staticFolder)
