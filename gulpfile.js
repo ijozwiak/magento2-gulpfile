@@ -13,6 +13,7 @@ const gulp = require('gulp'),
     sourcemap = require('gulp-sourcemaps'),
     stylelint = require('gulp-stylelint'),
     eslint = require('gulp-eslint'),
+    image = require('gulp-image'),
     themesConfig = require('./dev/tools/gulp/configs/themes'),
     browserConfig = require('./dev/tools/gulp/configs/browser-sync'),
     stylelintConfig = require('./dev/tools/gulp/configs/stylelint')
@@ -30,7 +31,7 @@ const folderToClean = [
  * Lint less files (excludes _module.less - see config/stylelint.js)
  */
 gulp.task('less:lint', function lintCssTask() {
-    const filesToLint = ['app/design/frontend/' + theme.vendor + '/' + theme.name + '/**/*.' + theme.lang];
+    const filesToLint = 'app/design/frontend/' + theme.vendor + '/' + theme.name + '/**/*.less';
 
     return gulp.src(filesToLint)
         .pipe(stylelint({
@@ -49,7 +50,7 @@ gulp.task('less:lint', function lintCssTask() {
  */
 gulp.task('less:compile', () => {
     const filesToCompile = theme.files.map((file) => {
-        return 'pub/static/frontend/' + theme.vendor + '/' + theme.name + '/' + theme.locale + '/' + file + '.' + theme.lang
+        return 'pub/static/frontend/' + theme.vendor + '/' + theme.name + '/' + theme.locale + '/' + file + '.less';
     });
 
     return gulp.src(filesToCompile)
@@ -74,7 +75,7 @@ gulp.task('less', gulp.series('less:lint', 'less:compile'));
  * Lint all JS files in theme folder
  */
 gulp.task('js:lint', () => {
-    const filesToLint = ['app/design/frontend/' + theme.vendor + '/' + theme.name + '/**/*.js'];
+    const filesToLint = 'app/design/frontend/' + theme.vendor + '/' + theme.name + '/**/*.js';
 
     return gulp.src(filesToLint)
         .pipe(eslint(eslintConfig))
@@ -89,6 +90,21 @@ gulp.task('js:lint', () => {
  * JS processing 
  */
 gulp.task('js', gulp.series('js:lint'));
+
+/**
+ * Optimize images in web/images folder
+ */
+gulp.task('image:optimize', function () {
+    const imageFolder = 'app/design/frontend/' + theme.vendor + '/' + theme.name + '/web/images',
+        fileTypes = ['png', 'jpg', 'svg'],
+        filePaths = fileTypes.map((file) => {
+            return imageFolder + '/**/*.' + file;
+        });
+
+    return gulp.src(filePaths)
+        .pipe(image())
+        .pipe(gulp.dest(imageFolder));
+});
 
 /**
  * Cache clean

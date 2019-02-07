@@ -24,6 +24,7 @@ Installation
 		"gulp-run": "^1.7.1",
 		"gulp-sourcemaps": "^2.6.0",
 		"gulp-stylelint": "^8.0.0",
+		"gulp-image": "^4.4.1",
 		"gulp-util": "^3.0.8",
 		"stylelint": "^9.10.0",
 		"stylelint-config-standard": "^18.2.0",
@@ -203,6 +204,12 @@ Lint js files:
 Alias for js:lint:
 
 	gulp js [--theme-alias]
+
+Optimize images in the web/images folder
+
+	gulp image:optimize [--theme-alias]
+
+> Note: this task overwrites existing image files. If you want to keep the original files specify optimized images destination folder in gulp.dest pipe
 
 Clean local cache in var/page_cache/ var/cache/ /var/di/ /var/generation/: 
         

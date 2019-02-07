@@ -8,6 +8,7 @@
     "gulp-run": "^1.7.1",
     "gulp-sourcemaps": "^2.6.0",
     "gulp-stylelint": "^8.0.0",
+    "gulp-image": "^4.4.1",
     "gulp-util": "^3.0.8",
     "stylelint": "^9.10.0",
     "stylelint-config-standard": "^18.2.0",
