@@ -17,7 +17,7 @@ const gulp = require('gulp'),
     themesConfig = require('./dev/tools/gulp/configs/themes'),
     browserConfig = require('./dev/tools/gulp/configs/browser-sync'),
     stylelintConfig = require('./dev/tools/gulp/configs/stylelint')
-    eslintConfig = require('./dev/tools/gulp/configs/eslint');
+eslintConfig = require('./dev/tools/gulp/configs/eslint');
 
 const options = (process.argv.slice(2))[1] ? ((process.argv.slice(2))[1]).substring(2) : Object.keys(themesConfig)[0];
 const theme = themesConfig[options];
@@ -67,11 +67,6 @@ gulp.task('less:compile', () => {
 });
 
 /**
- * Less processing 
- */
-gulp.task('less', gulp.series('less:lint', 'less:compile'));
-
-/**
  * Lint all JS files in theme folder
  */
 gulp.task('js:lint', () => {
@@ -85,11 +80,6 @@ gulp.task('js:lint', () => {
             gutil.log(chalk.green('JS files checked'));
         }));
 });
-
-/**
- * JS processing 
- */
-gulp.task('js', gulp.series('js:lint'));
 
 /**
  * Optimize images in web/images folder
@@ -203,6 +193,9 @@ gulp.task('serve', () => {
 });
 
 /**
- * Default task
+ * Task sequences
  */
+gulp.task('less', gulp.series('less:lint', 'less:compile'));
+gulp.task('js', gulp.series('js:lint'));
+gulp.task('refresh', gulp.series('clean:static', 'source', 'less'));
 gulp.task('theme', gulp.series('clean:cache', 'clean:static', 'source', 'less', 'serve'));

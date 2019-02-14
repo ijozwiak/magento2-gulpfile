@@ -173,15 +173,7 @@ Update _rules_ with your custom ones adding to or overriding the existing [stand
 
 Usage
 --------
-**Default usage**
-
-Refresh static assets, lint, compile and watch less files for changes (run `gulp --tasks` for more details):
-
-        gulp theme [--theme-alias]
-
-> Note: [--theme-alias] is optional, the first available theme in themes.js is used by default
----
-**Additional commands**
+**Basic tasks**
 
 Lint less files: 
 
@@ -234,6 +226,26 @@ Manually trigger static asset deployment for admin:
 Serves static assets and watches for less file changes in vendor modules/themes:
         
 	gulp serve [--theme-alias]
+
+---
+**Task sequences**
+Lint and compile less:
+	
+	gulp less [--theme-alias]
+
+JS processing:
+
+	gulp js [--theme-alias]
+
+Rebuild aliases and compile less (eg. when adding new less files):
+
+	gulp refresh [--theme-alias]
+
+Refresh static assets, lint, compile and watch less files for changes (run `gulp --tasks` for more details):
+
+	gulp theme [--theme-alias]
+
+> Note: [--theme-alias] is optional, the first available theme in themes.js is used by default
 
 License
 -----
