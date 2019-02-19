@@ -3,6 +3,7 @@
  * See LICENSE.MD for license details.
  */
 
+/* Modules */
 const gulp = require('gulp'),
     less = require('gulp-less'),
     gutil = require('gulp-util'),
@@ -13,12 +14,15 @@ const gulp = require('gulp'),
     sourcemap = require('gulp-sourcemaps'),
     stylelint = require('gulp-stylelint'),
     eslint = require('gulp-eslint'),
-    image = require('gulp-image'),
-    themesConfig = require('./dev/tools/gulp/configs/themes'),
-    browserConfig = require('./dev/tools/gulp/configs/browser-sync'),
-    stylelintConfig = require('./dev/tools/gulp/configs/stylelint')
-eslintConfig = require('./dev/tools/gulp/configs/eslint');
+    image = require('gulp-image');
 
+/* Configs */
+const themesConfig = require('./dev/tools/gulp/configs/themes'),
+    browserConfig = require('./dev/tools/gulp/configs/browser-sync'),
+    stylelintConfig = require('./dev/tools/gulp/configs/stylelint'),
+    eslintConfig = require('./dev/tools/gulp/configs/eslint');
+
+/* Theme options and paths */
 const options = (process.argv.slice(2))[1] ? ((process.argv.slice(2))[1]).substring(2) : Object.keys(themesConfig)[0];
 const theme = themesConfig[options];
 const staticFolder = 'pub/static/' + theme.area + '/' + theme.vendor + '/' + theme.name + '/' + theme.locale;
@@ -70,7 +74,7 @@ gulp.task('less:compile', () => {
  * Lint all JS files in theme folder
  */
 gulp.task('js:lint', () => {
-    const filesToLint = 'app/design/frontend/' + theme.vendor + '/' + theme.name + '/**/*.js';
+    const filesToLint = ['app/design/frontend/' + theme.vendor + '/' + theme.name + '/**/*.js', '!**/*.min.js', '!/**/requirejs-config.js'];
 
     return gulp.src(filesToLint)
         .pipe(eslint(eslintConfig))
