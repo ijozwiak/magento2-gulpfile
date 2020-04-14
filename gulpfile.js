@@ -1,5 +1,5 @@
 /**
- * Copyright © 2020 Rocket Web
+ * Copyright © 2019 Rocket Web
  * See LICENSE.MD for license details.
  */
 
@@ -15,6 +15,7 @@ const gulp = require('gulp'),
   stylelint = require('gulp-stylelint'),
   eslint = require('gulp-eslint'),
   image = require('gulp-image'),
+  imageResize = require('gulp-image-resize'),
   parseArgs = require('minimist');
 
 /* Configs */
@@ -118,9 +119,8 @@ gulp.task('image:theme:optimize', function (done) {
 
 /**
  * Optimize specific images in pub/media folder
- * Arguments:
- * --input - specify input file folder, fallbacks to pub/media
- * --output - specify output file folder, fallbacks to --input (file overrides)
+ * @input {string} - specify input file folder, fallbacks to pub/media
+ * @output {string} - specify output file folder, fallbacks to --input (file overrides)
  */
 gulp.task('image:media:optimize', function (done) {
   const mediaFolder = 'pub/media';
@@ -130,6 +130,13 @@ gulp.task('image:media:optimize', function (done) {
   const outputFolder = args.output
     ? `${mediaFolder}/${args.output}`
     : `${mediaFolder}/${args.input}`;
+
+  if (!args.input) {
+    log(chalk.red('Please specify input folder'));
+    done();
+
+    return;
+  }
 
   return gulp
     .src(inputFolder)
@@ -141,6 +148,65 @@ gulp.task('image:media:optimize', function (done) {
 
   done();
 });
+
+/** 
+ * Resize specific images
+ * @input {string} - specify input blob
+ * @output {string} - specify output folder, defaults to pub/media/resized
+ * @width {number} - image width in px or percentage
+ * @height {number} - image height in px or percentage
+ * @crop {bool} - whether image should be cropped, default false
+ * @upscale {bool} - whether image can be upscaled, default false
+ * @gravity {string: NorthWest|North|NorthEast|West|Center|East|SouthWest|South|SouthEast} - set image gravity when cropping images
+ * @format {string: gif|png|jpeg } - override output format of the input file(s)
+ * @quality {number} - output quality of the resized image, default 1
+ * @background {string} - image bg color if applicable, 'none' to keep transparency
+ * @percentage {number} - percentage value of the image size
+ * @cover {bool} - maintain aspect ratio by overflowing dimensions when necessary, default false
+*/
+gulp.task('image:resize', function (done) {
+  const options = {
+    input: args.input,
+    output: args.output || 'pub/media/resized/',
+    width: args.width,
+    height: args.height,
+    crop: args.crop || false,
+    upscale: args.upscale || false,
+    gravity: args.gravity,
+    format: args.format,
+    quality: args.quality || 1,
+    background: args.background,
+    percentage: args.percentage,
+    cover: args.cover,
+  };
+
+  if (!options.input) {
+    log(chalk.red('Please specify input argument'));
+    done();
+
+    return;
+  }
+
+  if (!options.width) {
+    if (!options.height) {
+      log(chalk.red('Please specify new image dimensions'));
+      done();
+  
+      return;
+    }
+  }
+
+  return gulp
+    .src(options.input)
+    .pipe(imageResize(options))
+    .pipe(gulp.dest(options.output))
+    .on('end', () => {
+      log(chalk.green(`Images in ${options.input} have been resized and saved in ${options.output}`));
+    });
+
+  done();
+});
+
 
 /**
  * Cache clean
@@ -253,7 +319,7 @@ gulp.task('serve', () => {
     proxy: browserConfig.proxy,
   });
 
-  gulp.watch(
+  return gulp.watch(
     [`pub/static/frontend/${theme.vendor}/${theme.name}/**/*.less`],
     gulp.series('less')
   );
@@ -262,7 +328,7 @@ gulp.task('serve', () => {
 /**
  * Task sequences
  */
-gulp.task('less', gulp.series('less:compile'));
+gulp.task('less', gulp.series('less:lint', 'less:compile'));
 gulp.task('js', gulp.series('js:lint'));
 gulp.task('refresh', gulp.series('clean:static', 'source', 'less'));
 gulp.task(

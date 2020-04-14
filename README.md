@@ -123,11 +123,19 @@ Alias for js:lint:
 
 	gulp js [--theme-alias]
 
-Optimize images in the web/images folder
+Optimize images in the {theme}/web/images folder
 
-	gulp image:optimize [--theme-alias]
+	gulp image:theme:optimize [--theme-alias]
 
 > Note: this task overwrites existing image files. If you want to keep the original files specify optimized images destination folder in gulp.dest pipe
+
+Optimize specific images in the pub/media folder
+
+	gulp image:media:optimize [--theme-alias --input --output]
+
+Resize specific images
+
+	gulp image:resize [--theme-alias --input --output --width --height --crop --upscale --gravity --format --quality --background --percentage --cover]
 
 Clean local cache in var/page_cache/ var/cache/ /var/di/ /var/generation/: 
         
