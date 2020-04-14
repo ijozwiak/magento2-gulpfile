@@ -16,22 +16,27 @@ Installation
 1. Download gulpfile.js into the root folder of your project
 2. Add the following dependancies to your local package.json file (into devDependancies):
 		
-		"browser-sync": "^2.26.3",
+		"browser-sync": "^2.26.7",
 		"chalk": "^2.1.0",
-		"gulp": "^4.0.0",
+		"fancy-log": "^1.3.3",
+		"gulp": "^4.0.2",
 		"gulp-clean": "^0.3.2",
+		"gulp-eslint": "^5.0.0",
+		"gulp-image": "^6.0.0",
+		"gulp-image-resize": "^0.13.1",
 		"gulp-less": "^4.0.1",
 		"gulp-run": "^1.7.1",
 		"gulp-sourcemaps": "^2.6.0",
 		"gulp-stylelint": "^8.0.0",
-		"gulp-image": "^4.4.1",
-		"gulp-util": "^3.0.8",
+		"minimist": "^1.2.5",
 		"stylelint": "^9.10.0",
-		"stylelint-config-standard": "^18.2.0",
-		"gulp-eslint": "^5.0.0"
+		"stylelint-config-standard": "^18.2.0"
 3. Run 
 	
 		npm install
+	or
+
+		yarn install
 
 Configuration
 ----
