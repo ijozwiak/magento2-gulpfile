@@ -10,9 +10,13 @@ const gulp = require('gulp'),
   chalk = require('chalk'),
   clean = require('gulp-clean'),
   run = require('gulp-run'),
+  rename = require('gulp-rename'),
   browserSync = require('browser-sync').create(),
   sourcemap = require('gulp-sourcemaps'),
   stylelint = require('gulp-stylelint'),
+  postcss = require('gulp-postcss'),
+  uncss = require('postcss-uncss'),
+  nano = require('cssnano'),
   eslint = require('gulp-eslint'),
   image = require('gulp-image'),
   imageResize = require('gulp-image-resize'),
@@ -23,6 +27,7 @@ const themesConfig = require('./dev/tools/gulp/configs/themes'),
   browserConfig = require('./dev/tools/gulp/configs/browser-sync'),
   stylelintConfig = require('./dev/tools/gulp/configs/stylelint'),
   eslintConfig = require('./dev/tools/gulp/configs/eslint');
+uncssConfig = require('./dev/tools/gulp/configs/uncss');
 
 /* Theme options and paths */
 const args = parseArgs(process.argv.slice(2));
@@ -77,9 +82,74 @@ gulp.task('less:compile', () => {
 });
 
 /**
+ * unCSS - remove unused css on core pages and generate optimized stylesheets
+ */
+gulp.task('css:uncss', (done) => {
+  const cssFolder = `app/design/frontend/${theme.vendor}/${theme.name}/web/css`;
+  const entrypoints = uncssConfig.entrypoints;
+  let plugins = []
+
+  entrypoints.forEach(entrypoint => {
+    plugins = [
+      uncss({
+        html: [uncssConfig.baseUrl + entrypoint.path],
+        timeout: 5000,
+      })
+    ]
+
+    return gulp
+      .src([
+        staticFolder + '/css/styles-m.css',
+        staticFolder + '/css/styles-l.css',
+      ])
+      .pipe(postcss(plugins))
+      .pipe(rename(path => {
+        path.basename += `-${entrypoint.page}`;
+        path.extname = '.css';
+      }))
+      .pipe(gulp.dest(cssFolder))
+      .on('end', () => {
+        log(
+          chalk.green(
+            `Styles for ${entrypoint.page} have been optimized and saved in ${cssFolder}`
+          )
+        );
+      });
+  });
+
+  done();
+});
+
+/**
+ * Minify CSS (nano)
+ */
+gulp.task('css:minify', (done) => {
+  const cssFolder = `app/design/frontend/${theme.vendor}/${theme.name}/web/css`;
+  const plugins = [
+    nano({
+      preset: 'default',
+    }),
+  ];
+
+  return gulp
+    .src(staticFolder + '/css/**/*.css')
+    .pipe(postcss(plugins))
+    .pipe(gulp.dest(cssFolder))
+    .on('end', () => {
+      log(
+        chalk.green(
+          `Styles for have been minified and saved in ${cssFolder}`
+        )
+      );
+    });
+
+  done();
+});
+
+/**
  * Lint all JS files in theme folder
  */
-gulp.task('js:lint', () => {
+gulp.task('js:lint', (done) => {
   const filesToLint = [
     `app/design/frontend/${theme.vendor}/${theme.name}/**/*.js`,
     '!**/*.min.js',
@@ -94,6 +164,8 @@ gulp.task('js:lint', () => {
     .on('end', () => {
       log(chalk.green('JS files checked'));
     })
+
+  done();
 });
 
 /**
@@ -191,7 +263,7 @@ gulp.task('image:resize', function (done) {
     if (!options.height) {
       log(chalk.red('Please specify new image dimensions'));
       done();
-  
+
       return;
     }
   }
@@ -329,9 +401,8 @@ gulp.task('serve', () => {
  * Task sequences
  */
 gulp.task('less', gulp.series('less:lint', 'less:compile'));
+gulp.task('css', gulp.series('css:uncss', 'css:minify'));
 gulp.task('js', gulp.series('js:lint'));
 gulp.task('refresh', gulp.series('clean:static', 'source', 'less'));
-gulp.task(
-  'theme',
-  gulp.series('clean:cache', 'clean:static', 'source', 'less', 'serve')
-);
+gulp.task('dev', gulp.series('refresh', 'serve'));
+gulp.task('build', gulp.series('refresh', 'css'));

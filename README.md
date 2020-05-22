@@ -16,8 +16,10 @@ Installation
 1. Download gulpfile.js into the root folder of your project
 2. Add the following dependancies to your local package.json file (into devDependancies):
 		
+		"autoprefixer": "^9.4.10",
 		"browser-sync": "^2.26.7",
 		"chalk": "^2.1.0",
+		"cssnano": "^4.1.10",
 		"fancy-log": "^1.3.3",
 		"gulp": "^4.0.2",
 		"gulp-clean": "^0.3.2",
@@ -25,18 +27,23 @@ Installation
 		"gulp-image": "^6.0.0",
 		"gulp-image-resize": "^0.13.1",
 		"gulp-less": "^4.0.1",
+		"gulp-postcss": "^8.0.0",
+		"gulp-rename": "^2.0.0",
 		"gulp-run": "^1.7.1",
 		"gulp-sourcemaps": "^2.6.0",
 		"gulp-stylelint": "^8.0.0",
 		"minimist": "^1.2.5",
+		"postcss-less": "^3.1.2",
+		"postcss-uncss": "^0.17.0",
 		"stylelint": "^9.10.0",
-		"stylelint-config-standard": "^18.2.0"
+		"stylelint-config-standard": "^18.2.0",
+		"uncss": "^0.17.3"
 3. Run 
 	
-		npm install
+		yarn install
 	or
 
-		yarn install
+		npm install
 
 Configuration
 ----
@@ -102,8 +109,34 @@ Update _rules_ with your custom ones adding to or overriding the existing [stand
 
 > Note: ESlint configuration is specified within .eslintrc file. Please change your eslint environments and rules there. 
 
+**uncss.js**
+
+	module.exports = {
+		baseUrl: 'http://local.magento',
+		entrypoints: [
+			{
+				page: 'hp',
+				path: '/',
+			},
+			{
+				page: 'pdp',
+				path: '/juno-jacket.html',
+			},
+			{
+				page: 'plp',
+				path: '/women/tops-women/jackets-women.html',
+			}
+		]
+	}
+* _baseUrl_: Local url of your site
+* _page_: page identifier (will used in css file name eg. styles-m-hp.css)
+* _path_: path to page on storefront relative to base url
+
+
 Usage
 --------
+> To see all available commands in the console run `gulp --tasks`
+
 **Basic tasks**
 
 Lint less files: 
@@ -116,7 +149,7 @@ Compile less to CSS:
 
 	gulp less:compile [--theme-alias]
 
-Alias for less:lint and less:compile sequence:
+Alias for `less:lint` and `less:compile` sequence:
 
 	gulp less [--theme-alias]
 
@@ -124,33 +157,43 @@ Lint js files:
 
 	gulp js:lint [--theme-alias]
 
-Alias for js:lint:
+Alias for `js:lint`:
 
 	gulp js [--theme-alias]
 
-Optimize images in the {theme}/web/images folder
+UnCSS main css files:
+
+	gulp css:uncss [--theme-alias]
+
+> Note: this task requires uncss configuration file (dev/tools/gulp/configs/uncss.js)
+
+Minify css files using postCss:
+	
+	gulp css:minify [--theme-alias]
+
+Optimize images in the `{theme}/web/images` folder:
 
 	gulp image:theme:optimize [--theme-alias]
 
 > Note: this task overwrites existing image files. If you want to keep the original files specify optimized images destination folder in gulp.dest pipe
 
-Optimize specific images in the pub/media folder
+Optimize specific images in the `pub/media` folder:
 
 	gulp image:media:optimize [--theme-alias --input --output]
 
-Resize specific images
+Resize specific images:
 
 	gulp image:resize [--theme-alias --input --output --width --height --crop --upscale --gravity --format --quality --background --percentage --cover]
 
-Clean local cache in var/page_cache/ var/cache/ /var/di/ /var/generation/: 
-        
+Clean local cache in `var/page_cache/ var/cache/ /var/di/ /var/generation/`: 
+
 	gulp clean:cache [--theme-alias]
 
-Clean static assets in pub/static and var/view_preprocessed folders:
+Clean static assets in `pub/static` and var/view_preprocessed folders:
         
 	gulp clean:static [--theme-alias]
         
-Create aliases in pub/static folder:
+Create aliases in `pub/static` folder:
         
 	gulp source [--theme-alias]
 
@@ -180,9 +223,13 @@ Rebuild aliases and compile less (eg. when adding new less files):
 
 	gulp refresh [--theme-alias]
 
-Refresh static assets, lint, compile and watch less files for changes (run `gulp --tasks` for more details):
+Dev build - clean static assets, lint, compile and watch less files for changes:
 
-	gulp theme [--theme-alias]
+	gulp dev [--theme-alias]
+
+Prod build - clean static assets, lint, compile and optimize CSS (uncss and minify):
+
+	gulp build [--theme-alias]
 
 > Note: [--theme-alias] is optional, the first available theme in themes.js is used by default
 
