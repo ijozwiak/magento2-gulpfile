@@ -409,8 +409,8 @@ gulp.task('serve', () => {
     });
 
     return gulp.watch(
-        [`pub/static/frontend/${theme.vendor}/${theme.name}/**/*.less`],
-        gulp.series('less')
+        filesToCopy,
+        gulp.series('less:lint', 'less:copy', 'less:compile')
     );
 });
 
